@@ -2,23 +2,31 @@ package repository
 
 import (
 	"taxifriend/models"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
 //IOrder repository interface
 type IOrder interface {
-	Create(order *models.InputOrder) error
+	Create(order *models.Order) error
 	UpdateStatus(id, driverID, status string) error
-	Get(id string) (*models.InputOrder, error)
+	Get(id string) (*models.Order, error)
 }
-
 
 //Order repository implementation
 type Order struct {
-	//db  *dynamo.DB
+	DB *dynamodb.DynamoDB
+}
+
+//NewOrder create a new instance of Order service
+func NewOrder(db *dynamodb.DynamoDB) IOrder {
+	return &Order{DB: db}
 }
 
 //Get order by id
-func (o *Order) Get(id string) (*models.InputOrder, error)  {
+func (o *Order) Get(id string) (*models.Order, error) {
 	/*table := o.db.Table("Order")
 	var result models.InputOrder
 
@@ -46,10 +54,22 @@ func (o *Order) UpdateStatus(id, driverID, status string) error {
 }
 
 //Create creates an order
-func (o *Order) Create(order *models.InputOrder) error {
-	/*table := o.db.Table("Order")
+func (o *Order) Create(order *models.Order) error {
+	tableName := "Order"
+	av, err := dynamodbattribute.MarshalMap(order)
+	if err != nil {
+		return err
+	}
 
-	err := table.Put(order).Run()
-	*/
+	input := &dynamodb.PutItemInput {
+		Item:      av,
+		TableName: aws.String(tableName),
+	}
+
+	_, err = o.DB.PutItem(input)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

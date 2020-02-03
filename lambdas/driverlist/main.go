@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -36,7 +37,8 @@ func GetAll(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, 
 	}
 
 	if result == nil {
-		return handleResponse.ClientError(http.StatusBadRequest)
+		msgFormat := fmt.Sprintf("Bad request radio: %f, latitude: %f,longitute: %f", radio, latitude, longitude)
+		return handleResponse.ClientError(http.StatusBadRequest, msgFormat)
 	}
 
 	wrapRes := &models.Response{Result: result}

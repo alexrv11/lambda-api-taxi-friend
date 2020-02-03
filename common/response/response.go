@@ -24,12 +24,12 @@ func (handle *HandlerResponse) ServerError(err error) (events.APIGatewayProxyRes
 
 	return events.APIGatewayProxyResponse {
 		StatusCode: http.StatusInternalServerError,
-		Body:       http.StatusText(http.StatusInternalServerError),
+		Body:       err.Error(),
 	}, nil
 }
 
 // Similarly add a helper for send responses relating to client errors.
-func (handle *HandlerResponse) ClientError(status int) (events.APIGatewayProxyResponse, error) {
+func (handle *HandlerResponse) ClientError(status int, message string) (events.APIGatewayProxyResponse, error) {
 	return events.APIGatewayProxyResponse {
 		StatusCode: status,
 		Body:       http.StatusText(status),
