@@ -2,6 +2,7 @@ package services
 
 import (
 	"taxifriend/models"
+	"taxifriend/common/util"
 	"taxifriend/repository"
 	"time"
 
@@ -10,8 +11,8 @@ import (
 
 //IOrder interface
 type IOrder interface {
-	Create(inputOrder *models.InputOrder) error
-	Update(order *models.Order) error
+	Create(inputOrder *models.InputOrder) (*models.Order, error)
+	UpdateStatus(id, status string) error
 	GetItem(orderID string) (*models.Order, error)
 }
 
@@ -26,12 +27,12 @@ func NewOrder(orderRepository repository.IOrder) IOrder {
 }
 
 //Create register a new order
-func (o *Order) Create(inputOrder *models.InputOrder) error {
+func (o *Order) Create(inputOrder *models.InputOrder) (*models.Order, error) {
 
 	id := uuid.New().String()
 	status := "Registered"
-	dateCreated := time.Now()
-	lastUpdated := time.Now()
+	dateCreated := time.Now().UTC().Format(util.FormatDate)
+	lastUpdated := time.Now().UTC().Format(util.FormatDate)
 
 	order := &models.Order {
 						ID: id,
@@ -43,13 +44,13 @@ func (o *Order) Create(inputOrder *models.InputOrder) error {
 						DriverID: inputOrder.DriverID,
 					}
 	
-	return o.OrderRepository.Create(order)
+	return order ,o.OrderRepository.Create(order)
 }
 
-//Update updates a order
-func (o *Order) Update(order *models.Order) error {
-	order.LastUpdated = time.Now()
-	return o.OrderRepository.UpdateStatus(order.ID, order.DriverID, order.Status)
+//UpdateStatus updates a order
+func (o *Order) UpdateStatus(id, status string) error {
+	
+	return o.OrderRepository.UpdateStatus(id, status)
 }
 
 //GetItem gets an item

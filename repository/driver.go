@@ -49,7 +49,6 @@ func (d *Driver) GetDriverLocations() ([]models.DriverLocation, error) {
 	statusField := expression.Name("Status")
 	directionField := expression.Name("Direction")
 
-	// Get back the title, year, and rating
 	proj := expression.NamesList(idField, latitudeField, longitudeField, statusField, directionField)
 
 	expr, err := expression.NewBuilder().WithProjection(proj).Build()
@@ -119,7 +118,7 @@ func (d *Driver) GetItem(driverID string) (*models.Driver, error) {
 }
 
 //UpdateLocation update the driver location
-func (d *Driver) UpdateLocation(driverId string, location models.Location) error {
+func (d *Driver) UpdateLocation(driverID string, location models.Location) error {
 	/*table := d.DB.Table("Driver")
 	err := table.Update("Id", driverId).
 		Set("Latitude", location.Latitude).

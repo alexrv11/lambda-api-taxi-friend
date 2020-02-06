@@ -1,7 +1,9 @@
 package repository
 
 import (
+	"taxifriend/common/util"
 	"taxifriend/models"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -11,7 +13,7 @@ import (
 //IOrder repository interface
 type IOrder interface {
 	Create(order *models.Order) error
-	UpdateStatus(id, driverID, status string) error
+	UpdateStatus(id, status string) error
 	Get(id string) (*models.Order, error)
 }
 
@@ -27,29 +29,62 @@ func NewOrder(db *dynamodb.DynamoDB) IOrder {
 
 //Get order by id
 func (o *Order) Get(id string) (*models.Order, error) {
-	/*table := o.db.Table("Order")
-	var result models.InputOrder
-
-	err := table.Get("Id", id).One(&result)
+	input := &dynamodb.GetItemInput{
+		TableName: aws.String("Order"),
+		Key: map[string]*dynamodb.AttributeValue{
+			"id": {
+				S: aws.String(id),
+			},
+		},
+	}
+	result, err := o.DB.GetItem(input)
 	if err != nil {
 		return nil, err
 	}
 
-	return &result, nil*/
-	return nil, nil
+	if result.Item == nil {
+		return nil, err
+	}
+
+	bk := new(models.Order)
+	err = dynamodbattribute.UnmarshalMap(result.Item, bk)
+	if err != nil {
+		return nil, err
+	}
+
+	return bk, err
 }
 
 //UpdateStatus updates an order by driverId and status
-func (o *Order) UpdateStatus(id, driverID, status string) error {
-	/*table := o.db.Table("Order")
+func (o *Order) UpdateStatus(id, status string) error {
+	statusName := "status"
+	input := &dynamodb.UpdateItemInput{
+    ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+				":status": {
+					S: aws.String(status),
+				},
+				":last_updated": {
+					S: aws.String(time.Now().UTC().Format(util.FormatDate)),
+				},
+		},
+		ExpressionAttributeNames: map[string]*string{
+			"#ts": &statusName,
+		},
+    TableName: aws.String("Order"),
+    Key: map[string]*dynamodb.AttributeValue{
+        "id": {
+            S: aws.String(id),
+        },
+    },
+    ReturnValues:     aws.String("UPDATED_NEW"),
+    UpdateExpression: aws.String("set #ts = :status, last_updated= :last_updated"),
+	}
 
-	err := table.Update("Id", id).
-		If("DriverId = ?", driverId).
-		Set("Status", status).
-		Set("LastUpdated", time.Now()).
-		Run()
-
-	return err*/
+	_, err := o.DB.UpdateItem(input)
+	if err != nil {
+    return err
+	}
+	
 	return nil
 }
 

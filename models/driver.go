@@ -2,19 +2,19 @@ package models
 
 //Driver manages the driver information
 type Driver struct {
-	ID string `json:"id" dynamo:"Id,hash"`
-	Name string `json:"name" dynamo:"Name"`
-	FrontCarPhoto string `json:"frontCarPhoto" dynamo:"FrontCarPhoto"`
-	BackCarPhoto string `json:"backCarPhoto" dynamo:"BackCarPhoto"`
-	SideCarPhoto string `json:"sideCarPhoto" dynamo:"SideCarPhoto"`
-	FrontLicensePhoto string `json:"frontLicensePhoto" dynamo:"FrontLicensePhoto"`
-	BackLicensePhoto string `json:"backLicensePhoto" dynamo:"BackLicensePhoto"`
-	Latitude float64 `json:"latitude" dynamo:"Latitude"`
-	Longitude float64 `json:"longitude" dynamo:"Longitude"`
-	Phone string `json:"phone" dynamo:"Phone"`
-	Credit float32 `json:"credit" dynamo:"Credit"`
-	Status string `json:"status" dynamo:"Status"`
-	Direction int `json:"direction" dynamo:"Direction"`
-	Password string `json:"password" dynamo:"Password"`
-	CarIdentity string `json:"carIdentity" dynamo:"CarIdentity"`
+	ID string `json:"id"`
+	Name string `json:"name"`
+	FrontCarPhoto string `json:"frontCarPhoto"`
+	BackCarPhoto string `json:"backCarPhoto"`
+	SideCarPhoto string `json:"sideCarPhoto"`
+	FrontLicensePhoto string `json:"frontLicensePhoto"`
+	BackLicensePhoto string `json:"backLicensePhoto"`
+	Latitude float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+	Phone string `json:"phone"`
+	Credit float32 `json:"credit"`
+	Status string `json:"status"`
+	Direction int `json:"direction"`
+	Password string `json:"password"`
+	CarIdentity string `json:"carIdentity"`
 }
