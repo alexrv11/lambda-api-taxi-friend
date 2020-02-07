@@ -1,32 +1,42 @@
 package services
 
 import (
-	"alex/taxi-server/models"
-	"alex/taxi-server/repository"
+	"taxifriend/models"
+	"taxifriend/repository"
 	"github.com/google/uuid"
 )
 
+//IQr service
 type IQr interface {
-	UpdateDriver(driverId, qrCode string) error
-	Create(qr models.Qr) error
+	UpdateDriver(driverID, qrCode string) error
+	Create(qr *models.Qr) (*models.Qr, error)
 	GetItem(code string) (*models.Qr, error)
 }
 
+//Qr model
 type Qr struct {
 	QrRepository repository.IQr
 }
 
+//NewQr qr service
+func NewQr(repo repository.IQr) IQr {
+	return &Qr{QrRepository: repo}
+}
+
+//UpdateDriver update driver qr
 func (q *Qr) UpdateDriver(driverID, qrCode string) error  {
 	return q.QrRepository.UpdateDriver(driverID, qrCode)
 }
 
-func (q *Qr) Create(qr models.Qr) error {
+//Create creates qr
+func (q *Qr) Create(qr *models.Qr) (*models.Qr, error) {
 	qr.DriverID = "none"
-	qr.Code = uuid.New().String()
+	qr.ID = uuid.New().String()
 	qr.Status = "Registered"
-	return q.QrRepository.Create(qr)
+	return qr, q.QrRepository.Create(qr)
 }
 
+//GetItem get item
 func (q *Qr) GetItem(code string) (*models.Qr, error) {
 	return q.QrRepository.Get(code)
 }

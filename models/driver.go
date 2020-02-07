@@ -4,17 +4,17 @@ package models
 type Driver struct {
 	ID string `json:"id"`
 	Name string `json:"name"`
-	FrontCarPhoto string `json:"frontCarPhoto"`
-	BackCarPhoto string `json:"backCarPhoto"`
-	SideCarPhoto string `json:"sideCarPhoto"`
-	FrontLicensePhoto string `json:"frontLicensePhoto"`
-	BackLicensePhoto string `json:"backLicensePhoto"`
-	Latitude float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
+	FrontCarPhoto string `json:"front_car_photo"`
+	BackCarPhoto string `json:"back_car_photo"`
+	SideCarPhoto string `json:"side_car_photo"`
+	FrontLicensePhoto string `json:"front_license_photo"`
+	BackLicensePhoto string `json:"back_license_photo"`
+	Latitude float32 `json:"latitude"`
+	Longitude float32 `json:"longitude"`
 	Phone string `json:"phone"`
 	Credit float32 `json:"credit"`
 	Status string `json:"status"`
 	Direction int `json:"direction"`
 	Password string `json:"password"`
-	CarIdentity string `json:"carIdentity"`
+	CarIdentity string `json:"car_identity"`
 }

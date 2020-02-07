@@ -12,10 +12,10 @@ import (
 
 //IDriver interface
 type IDriver interface {
-	Create(driver *models.InputDriver) error
+	Create(driver *models.Driver) error
 	GetDriverLocations() ([]models.DriverLocation, error)
 	GetItem(driverID string) (*models.Driver, error)
-	UpdateLocation(driverID string, location models.Location) error
+	UpdateLocation(driverID string, location *models.Location) error
 }
 
 //Driver repository
@@ -29,11 +29,24 @@ func NewDriver(db *dynamodb.DynamoDB) IDriver {
 }
 
 //Create creates a new driver entity
-func (d *Driver) Create(driver *models.InputDriver) error {
-	/*table := d.DB.Table("Driver")
+func (d *Driver) Create(driver *models.Driver) error {
+	tableName := "Driver"
+	
+	av, err := dynamodbattribute.MarshalMap(driver)
+	if err != nil {
+		return err
+	}
 
-	err := table.Put(driver).Run()
-	*/
+	input := &dynamodb.PutItemInput {
+		Item:      av,
+		TableName: aws.String(tableName),
+	}
+
+	_, err = d.DB.PutItem(input)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -43,11 +56,11 @@ func (d *Driver) GetDriverLocations() ([]models.DriverLocation, error) {
 	drivers := make([]models.DriverLocation, 0)
 	tableName := "Driver"
 
-	idField := expression.Name("Id")
-	latitudeField := expression.Name("Latitude")
-	longitudeField := expression.Name("Longitude")
-	statusField := expression.Name("Status")
-	directionField := expression.Name("Direction")
+	idField := expression.Name("id")
+	latitudeField := expression.Name("latitude")
+	longitudeField := expression.Name("longitude")
+	statusField := expression.Name("status")
+	directionField := expression.Name("direction")
 
 	proj := expression.NamesList(idField, latitudeField, longitudeField, statusField, directionField)
 
@@ -94,7 +107,7 @@ func (d *Driver) GetItem(driverID string) (*models.Driver, error) {
 	input := &dynamodb.GetItemInput{
 		TableName: aws.String("Driver"),
 		Key: map[string]*dynamodb.AttributeValue{
-			"Id": {
+			"id": {
 				S: aws.String(driverID),
 			},
 		},
@@ -118,13 +131,31 @@ func (d *Driver) GetItem(driverID string) (*models.Driver, error) {
 }
 
 //UpdateLocation update the driver location
-func (d *Driver) UpdateLocation(driverID string, location models.Location) error {
-	/*table := d.DB.Table("Driver")
-	err := table.Update("Id", driverId).
-		Set("Latitude", location.Latitude).
-		Set("Longitude", location.Longitude).
-		Run()
+func (d *Driver) UpdateLocation(driverID string, location *models.Location) error {
+	
+	input := &dynamodb.UpdateItemInput{
+    ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+				":latitude": {
+					N: aws.String(fmt.Sprintf("%f", location.Latitude)),
+				},
+				":longitude": {
+					N: aws.String(fmt.Sprintf("%f", location.Longitude)),
+				},
+		},
+    TableName: aws.String("Driver"),
+    Key: map[string]*dynamodb.AttributeValue{
+        "id": {
+            S: aws.String(driverID),
+        },
+    },
+    ReturnValues:     aws.String("UPDATED_NEW"),
+    UpdateExpression: aws.String("set latitude = :latitude, longitude = :longitude"),
+	}
 
-	return err*/
+	_, err := d.DB.UpdateItem(input)
+	if err != nil {
+    return err
+	}
+	
 	return nil
 }

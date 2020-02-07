@@ -18,12 +18,20 @@ func NewDriver( driverRepo repository.IDriver) IDriver {
 }
 
 //Create register a new driver
-func (d *Driver) Create(driver *models.InputDriver) error  {
+func (d *Driver) Create(driver *models.Driver) (*models.DriverInfo, error)  {
 	driver.Password = utils.CreatePassword(driver.Password)
-	driver.Id = uuid.New().String()
+	driver.ID = uuid.New().String()
 	driver.Status = "Registered"
 	driver.Credit = 0
-	return d.driverRepository.Create(driver)
+	result := &models.DriverInfo{
+		ID: driver.ID,
+		Status: driver.Status,
+		Name: driver.Name,
+		CarIdentity: driver.CarIdentity,
+		Phone: driver.Phone,
+		Credit: driver.Credit,
+	}
+	return result, d.driverRepository.Create(driver)
 }
 
 //GetDriverLocations all driver's location 
@@ -57,7 +65,7 @@ func (d *Driver) GetItem(driverID string) (*models.Driver, error)  {
 }
 
 //UpdateLocation updates a driver's location
-func (d *Driver) UpdateLocation(driverID string, location models.Location) error {
+func (d *Driver) UpdateLocation(driverID string, location *models.Location) error {
 
 	return d.driverRepository.UpdateLocation(driverID, location)
 }
