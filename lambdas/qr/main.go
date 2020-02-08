@@ -26,7 +26,7 @@ var qrService = services.NewQr(qrRepository)
 
 //GetQr get order information
 func GetQr(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	qrID := req.PathParameters["qrid"]
+	qrID := req.PathParameters["id"]
 
 	result, err := qrService.GetItem(qrID)
 	if err != nil {
@@ -74,7 +74,7 @@ func CreateQr(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse
 
 //UpdateQrDriverID updates an qr driver
 func UpdateQrDriverID(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	qrID := req.PathParameters["qrid"]
+	qrID := req.PathParameters["id"]
 	payload := []byte(req.Body)
 
 
@@ -87,7 +87,7 @@ func UpdateQrDriverID(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 		return handleResponse.ServerError(err)
 	}
 
-	err = qrService.UpdateDriver(qrID, qr.DriverID)
+	err = qrService.UpdateDriver(qr.DriverID, qrID)
 	if err != nil {
 		return handleResponse.ServerError(err)
 	}

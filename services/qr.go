@@ -30,8 +30,9 @@ func (q *Qr) UpdateDriver(driverID, qrCode string) error  {
 
 //Create creates qr
 func (q *Qr) Create(qr *models.Qr) (*models.Qr, error) {
+	code := uuid.New().String()
 	qr.DriverID = "none"
-	qr.ID = uuid.New().String()
+	qr.ID = code[:12]
 	qr.Status = "Registered"
 	return qr, q.QrRepository.Create(qr)
 }
