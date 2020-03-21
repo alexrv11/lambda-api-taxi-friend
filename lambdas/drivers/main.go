@@ -1,16 +1,17 @@
 package main
 
 import (
-    "encoding/json"
-    "fmt"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"taxifriend/common/db"
 	"taxifriend/common/response"
+	"taxifriend/models"
+	"taxifriend/providers/storage"
 	"taxifriend/repository"
 	"taxifriend/services"
-	"taxifriend/models"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -20,10 +21,11 @@ import (
 // use.
 var database = db.CreateDB()
 var s3, _ = db.CreateS3()
+var uploader = storage.NewUploaderS3(s3)
 var errorLogger = log.New(os.Stderr, "ERROR ", log.Llongfile)
 var handleResponse = response.New(errorLogger)
 var driverRepository = repository.NewDriver(database)
-var driverService = services.NewDriver(driverRepository, s3)
+var driverService = services.NewDriver(driverRepository, uploader)
 
 //GetItem gets item
 func GetItem(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
