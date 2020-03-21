@@ -10,6 +10,7 @@ import (
 	"taxifriend/common/db"
 	"taxifriend/common/response"
 	"taxifriend/models"
+	"taxifriend/providers/storage"
 	"taxifriend/repository"
 	"taxifriend/services"
 
@@ -20,10 +21,13 @@ import (
 // Declare a new DynamoDB instance. Note that this is safe for concurrent
 // use.
 var database = db.CreateDB()
+
+var s3, _ = db.CreateS3()
+var uploader = storage.NewUploaderS3(s3)
 var errorLogger = log.New(os.Stderr, "ERROR ", log.Llongfile)
 var handleResponse = response.New(errorLogger)
-var driverRepositiory = repository.NewDriver(database)
-var driverService = services.NewDriver(driverRepositiory)
+var driverRepository = repository.NewDriver(database)
+var driverService = services.NewDriver(driverRepository, uploader)
 
 func GetAll(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 

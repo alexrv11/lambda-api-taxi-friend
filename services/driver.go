@@ -38,27 +38,27 @@ func (d *Driver) Create(driver *models.Driver) (*models.DriverInfo, error)  {
 	}
 
 	fileBackCar := &domain.File{
-		Name:fmt.Sprintf("%s-taxi-back-photo-%s",driver.ID, uuid.New().String()),
+		Name:fmt.Sprintf("%s-taxi-back-photo-%s.jpg",driver.ID, uuid.New().String()),
 		Content:driver.BackCarPhoto,
 	}
 
 	fileFrontCar := &domain.File{
-		Name:fmt.Sprintf("%s-taxi-front-photo-%s",driver.ID, uuid.New().String()),
+		Name:fmt.Sprintf("%s-taxi-front-photo-%s.jpg",driver.ID, uuid.New().String()),
 		Content:driver.FrontCarPhoto,
 	}
 
 	fileBackLicense := &domain.File{
-		Name:fmt.Sprintf("%s-license-back-photo-%s",driver.ID, uuid.New().String()),
+		Name:fmt.Sprintf("%s-license-back-photo-%s.jpg",driver.ID, uuid.New().String()),
 		Content: driver.BackLicensePhoto,
 	}
 
 	fileFrontLicense := &domain.File{
-		Name:fmt.Sprintf("%s-license-front-photo-%s",driver.ID, uuid.New().String()),
+		Name:fmt.Sprintf("%s-license-front-photo-%s.jpg",driver.ID, uuid.New().String()),
 		Content: driver.FrontLicensePhoto,
 	}
 
 	fileSideCar := &domain.File{
-		Name:fmt.Sprintf("%s-taxi-side-photo-%s",driver.ID, uuid.New().String()),
+		Name:fmt.Sprintf("%s-taxi-side-photo-%s.jpg",driver.ID, uuid.New().String()),
 		Content: driver.SideCarPhoto,
 	}
 
@@ -67,6 +67,12 @@ func (d *Driver) Create(driver *models.Driver) (*models.DriverInfo, error)  {
 	if err != nil {
 		return nil, err
 	}
+
+	driver.FrontCarPhoto = fileFrontCar.Name
+	driver.BackCarPhoto = fileBackCar.Name
+	driver.SideCarPhoto = fileSideCar.Name
+	driver.BackLicensePhoto = fileBackLicense.Name
+	driver.FrontLicensePhoto = fileFrontLicense.Name
 
 	return result, d.driverRepository.Create(driver)
 }
