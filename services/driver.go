@@ -1,20 +1,36 @@
 package services
 
 import (
+	"bytes"
+	"encoding/base64"
+	"fmt"
 	"taxifriend/models"
 	"taxifriend/repository"
 	"taxifriend/utils"
+	"net/http"
 	"github.com/google/uuid"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
+
+const(
+	S3Bucket="taxi-friend-drivers"
+)
+
+type File struct {
+	Name string
+	Content string
+}
 
 //Driver service
 type Driver struct {
 	driverRepository repository.IDriver
+	storage *s3.S3
 }
 
 //NewDriver creates a driver service
-func NewDriver( driverRepo repository.IDriver) IDriver {
-	return &Driver{driverRepository: driverRepo }
+func NewDriver( driverRepo repository.IDriver, storage *s3.S3) IDriver {
+	return &Driver{driverRepository: driverRepo, storage: storage}
 }
 
 //Create register a new driver
@@ -31,7 +47,61 @@ func (d *Driver) Create(driver *models.Driver) (*models.DriverInfo, error)  {
 		Phone: driver.Phone,
 		Credit: driver.Credit,
 	}
+
+	fileBackCar := &File{
+		Name:fmt.Sprintf("%s-taxi-back-photo-%s",driver.ID, uuid.New().String()),
+		Content:driver.BackCarPhoto,
+	}
+
+	fileFrontCar := &File{
+		Name:fmt.Sprintf("%s-taxi-front-photo-%s",driver.ID, uuid.New().String()),
+		Content:driver.FrontCarPhoto,
+	}
+
+	fileBackLicense := &File{
+		Name:fmt.Sprintf("%s-license-back-photo-%s",driver.ID, uuid.New().String()),
+		Content: driver.BackLicensePhoto,
+	}
+
+	fileFrontLicense := &File{
+		Name:fmt.Sprintf("%s-license-front-photo-%s",driver.ID, uuid.New().String()),
+		Content: driver.FrontLicensePhoto,
+	}
+
+	fileSideCar := &File{
+		Name:fmt.Sprintf("%s-taxi-side-photo-%s",driver.ID, uuid.New().String()),
+		Content: driver.SideCarPhoto,
+	}
+
+	err := d.uploadContent(driver.ID, fileFrontLicense, fileBackLicense, fileBackCar, fileFrontCar, fileSideCar)
+
 	return result, d.driverRepository.Create(driver)
+}
+
+func (d *Driver) uploadContent(owner string, contents ...*File) error {
+
+	for _, file := range contents {
+			buffer, err := base64.StdEncoding.DecodeString(file.Content)
+			if err != nil {
+				return err
+			}
+			_, err = d.storage.PutObject(&s3.PutObjectInput{
+				Bucket:               aws.String(S3Bucket),
+				Key:                  aws.String(fmt.Sprintf("%s/%s", owner, file.Name)),
+				ACL:                  aws.String("private"),
+				Body:                 bytes.NewReader(buffer),
+				ContentLength:        aws.Int64(int64(len(buffer))),
+				ContentType:          aws.String(http.DetectContentType(buffer)),
+				ContentDisposition:   aws.String("attachment"),
+				ServerSideEncryption: aws.String("AES256"),
+		})
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 //GetDriverLocations all driver's location 

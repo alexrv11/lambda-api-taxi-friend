@@ -19,10 +19,11 @@ import (
 // Declare a new DynamoDB instance. Note that this is safe for concurrent
 // use.
 var database = db.CreateDB()
+var s3, _ = db.CreateS3()
 var errorLogger = log.New(os.Stderr, "ERROR ", log.Llongfile)
 var handleResponse = response.New(errorLogger)
-var driverRepositiory = repository.NewDriver(database)
-var driverService = services.NewDriver(driverRepositiory)
+var driverRepository = repository.NewDriver(database)
+var driverService = services.NewDriver(driverRepository, s3)
 
 //GetItem gets item
 func GetItem(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
