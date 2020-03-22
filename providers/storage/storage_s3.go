@@ -7,8 +7,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"net/http"
-	"taxifriend/providers"
-	"taxifriend/providers/domain"
+	"github.com/alexrv11/lambda-api-taxi-friend/providers"
+	"github.com/alexrv11/lambda-api-taxi-friend/providers/domain"
 )
 
 const(

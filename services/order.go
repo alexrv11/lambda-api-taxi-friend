@@ -1,9 +1,9 @@
 package services
 
 import (
-	"taxifriend/models"
-	"taxifriend/common/util"
-	"taxifriend/repository"
+	"github.com/alexrv11/lambda-api-taxi-friend/models"
+	"github.com/alexrv11/lambda-api-taxi-friend/common/util"
+	"github.com/alexrv11/lambda-api-taxi-friend/repository"
 	"time"
 
 	"github.com/google/uuid"

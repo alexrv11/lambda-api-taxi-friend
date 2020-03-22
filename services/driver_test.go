@@ -3,9 +3,9 @@ package services
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"taxifriend/models"
-	mockProviders "taxifriend/providers/storage/mocks"
-	"taxifriend/repository/mocks"
+	"github.com/alexrv11/lambda-api-taxi-friend/models"
+	mockProviders "github.com/alexrv11/lambda-api-taxi-friend/providers/storage/mocks"
+	"github.com/alexrv11/lambda-api-taxi-friend/repository/mocks"
 	"testing"
 )
 

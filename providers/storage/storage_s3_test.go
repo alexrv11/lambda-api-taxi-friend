@@ -5,8 +5,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"strings"
-	"taxifriend/providers/domain"
-	"taxifriend/providers/storage/mocks"
+	"github.com/alexrv11/lambda-api-taxi-friend/providers/domain"
+	"github.com/alexrv11/lambda-api-taxi-friend/providers/storage/mocks"
 	"testing"
 )
 

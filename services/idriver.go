@@ -1,6 +1,6 @@
 package services
 
-import "taxifriend/models"
+import "github.com/alexrv11/lambda-api-taxi-friend/models"
 
 //IDriver service interface
 type IDriver interface {

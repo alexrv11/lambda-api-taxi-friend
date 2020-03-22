@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"taxifriend/common/util"
-	"taxifriend/models"
+	"github.com/alexrv11/lambda-api-taxi-friend/common/util"
+	"github.com/alexrv11/lambda-api-taxi-friend/models"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"

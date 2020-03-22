@@ -2,7 +2,7 @@ package repository
 
 import (
 	"fmt"
-	"taxifriend/models"
+	"github.com/alexrv11/lambda-api-taxi-friend/models"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"

@@ -3,11 +3,11 @@ package services
 import (
 	"fmt"
 	"github.com/google/uuid"
-	"taxifriend/models"
-	"taxifriend/providers"
-	"taxifriend/providers/domain"
-	"taxifriend/repository"
-	"taxifriend/utils"
+	"github.com/alexrv11/lambda-api-taxi-friend/models"
+	"github.com/alexrv11/lambda-api-taxi-friend/providers"
+	"github.com/alexrv11/lambda-api-taxi-friend/providers/domain"
+	"github.com/alexrv11/lambda-api-taxi-friend/repository"
+	"github.com/alexrv11/lambda-api-taxi-friend/utils"
 )
 
 
