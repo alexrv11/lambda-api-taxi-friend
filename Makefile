@@ -4,9 +4,9 @@ deps:
 	go get -u ./...
 
 clean: 
-	rm -rf ./lambdas/ping/ping
+	rm -rf ./dist
 	
 build:
-	GOOS=linux GOARCH=amd64 go build -o lambdas/ping/ping ./lambdas/ping
+	GOOS=linux GOARCH=amd64 go build -o dist/ping/ping ./lambdas/ping
 
 rebuild:clean build
