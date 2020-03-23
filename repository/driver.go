@@ -31,13 +31,13 @@ func NewDriver(db *dynamodb.DynamoDB) IDriver {
 //Create creates a new driver entity
 func (d *Driver) Create(driver *models.Driver) error {
 	tableName := "Driver"
-	
+
 	av, err := dynamodbattribute.MarshalMap(driver)
 	if err != nil {
 		return err
 	}
 
-	input := &dynamodb.PutItemInput {
+	input := &dynamodb.PutItemInput{
 		Item:      av,
 		TableName: aws.String(tableName),
 	}
@@ -132,30 +132,30 @@ func (d *Driver) GetItem(driverID string) (*models.Driver, error) {
 
 //UpdateLocation update the driver location
 func (d *Driver) UpdateLocation(driverID string, location *models.Location) error {
-	
+
 	input := &dynamodb.UpdateItemInput{
-    ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-				":latitude": {
-					N: aws.String(fmt.Sprintf("%f", location.Latitude)),
-				},
-				":longitude": {
-					N: aws.String(fmt.Sprintf("%f", location.Longitude)),
-				},
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":latitude": {
+				N: aws.String(fmt.Sprintf("%f", location.Latitude)),
+			},
+			":longitude": {
+				N: aws.String(fmt.Sprintf("%f", location.Longitude)),
+			},
 		},
-    TableName: aws.String("Driver"),
-    Key: map[string]*dynamodb.AttributeValue{
-        "id": {
-            S: aws.String(driverID),
-        },
-    },
-    ReturnValues:     aws.String("UPDATED_NEW"),
-    UpdateExpression: aws.String("set latitude = :latitude, longitude = :longitude"),
+		TableName: aws.String("Driver"),
+		Key: map[string]*dynamodb.AttributeValue{
+			"id": {
+				S: aws.String(driverID),
+			},
+		},
+		ReturnValues:     aws.String("UPDATED_NEW"),
+		UpdateExpression: aws.String("set latitude = :latitude, longitude = :longitude"),
 	}
 
 	_, err := d.DB.UpdateItem(input)
 	if err != nil {
-    return err
+		return err
 	}
-	
+
 	return nil
 }

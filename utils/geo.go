@@ -4,7 +4,7 @@ import "math"
 
 const RadioEarth = 6371
 
-func DistanceInKmBetweenEarthCoordinates(lat1, long1, lat2, long2 float64)  float64 {
+func DistanceInKmBetweenEarthCoordinates(lat1, long1, lat2, long2 float64) float64 {
 
 	radlat1 := float64(math.Pi * lat1 / 180)
 	radlat2 := float64(math.Pi * lat2 / 180)
@@ -12,7 +12,7 @@ func DistanceInKmBetweenEarthCoordinates(lat1, long1, lat2, long2 float64)  floa
 	theta := float64(long1 - long2)
 	radtheta := float64(math.Pi * theta / 180)
 
-	dist := math.Sin(radlat1) * math.Sin(radlat2) + math.Cos(radlat1) * math.Cos(radlat2) * math.Cos(radtheta)
+	dist := math.Sin(radlat1)*math.Sin(radlat2) + math.Cos(radlat1)*math.Cos(radlat2)*math.Cos(radtheta)
 
 	if dist > 1 {
 		dist = 1

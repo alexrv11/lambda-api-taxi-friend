@@ -3,14 +3,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/alexrv11/lambda-api-taxi-friend/common/db"
+	"github.com/alexrv11/lambda-api-taxi-friend/common/response"
+	"github.com/alexrv11/lambda-api-taxi-friend/models"
+	"github.com/alexrv11/lambda-api-taxi-friend/repository"
+	"github.com/alexrv11/lambda-api-taxi-friend/services"
 	"log"
 	"net/http"
 	"os"
-	"github.com/alexrv11/lambda-api-taxi-friend/common/db"
-	"github.com/alexrv11/lambda-api-taxi-friend/common/response"
-	"github.com/alexrv11/lambda-api-taxi-friend/repository"
-	"github.com/alexrv11/lambda-api-taxi-friend/services"
-	"github.com/alexrv11/lambda-api-taxi-friend/models"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -48,14 +48,14 @@ func CreateOrder(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	payload := []byte(req.Body)
 	order := &models.InputOrder{}
 	err := json.Unmarshal(payload, order)
-	
+
 	if err != nil {
-		errorLogger.Printf("%s",  err.Error())
-	
+		errorLogger.Printf("%s", err.Error())
+
 		return handleResponse.ServerError(err)
 	}
 
-	result , err := orderService.Create(order)
+	result, err := orderService.Create(order)
 	if err != nil {
 		return handleResponse.ServerError(err)
 	}
@@ -76,13 +76,12 @@ func UpdateOrderStatus(req events.APIGatewayProxyRequest) (events.APIGatewayProx
 	orderID := req.PathParameters["orderid"]
 	payload := []byte(req.Body)
 
-
 	orderStatus := &models.InputOrderStatus{}
 	err := json.Unmarshal(payload, orderStatus)
-	
+
 	if err != nil {
-		errorLogger.Printf("%s",  err.Error())
-	
+		errorLogger.Printf("%s", err.Error())
+
 		return handleResponse.ServerError(err)
 	}
 
@@ -90,7 +89,7 @@ func UpdateOrderStatus(req events.APIGatewayProxyRequest) (events.APIGatewayProx
 	if err != nil {
 		return handleResponse.ServerError(err)
 	}
-	
+
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Body:       "",
@@ -100,13 +99,13 @@ func UpdateOrderStatus(req events.APIGatewayProxyRequest) (events.APIGatewayProx
 func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	switch req.HTTPMethod {
 	case "GET":
-			return GetOrder(req)
+		return GetOrder(req)
 	case "POST":
-			return CreateOrder(req)
-	case "PATCH": 
-			return UpdateOrderStatus(req)
+		return CreateOrder(req)
+	case "PATCH":
+		return UpdateOrderStatus(req)
 	default:
-			return handleResponse.ClientError(http.StatusMethodNotAllowed, "resources method not allowed")
+		return handleResponse.ClientError(http.StatusMethodNotAllowed, "resources method not allowed")
 	}
 }
 

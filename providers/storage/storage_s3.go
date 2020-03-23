@@ -4,15 +4,15 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"github.com/alexrv11/lambda-api-taxi-friend/providers"
+	"github.com/alexrv11/lambda-api-taxi-friend/providers/domain"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"net/http"
-	"github.com/alexrv11/lambda-api-taxi-friend/providers"
-	"github.com/alexrv11/lambda-api-taxi-friend/providers/domain"
 )
 
-const(
-	S3Bucket="taxi-friend-drivers"
+const (
+	S3Bucket = "taxi-friend-drivers"
 )
 
 type UploaderS3 struct {

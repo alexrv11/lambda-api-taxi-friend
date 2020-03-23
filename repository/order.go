@@ -59,32 +59,32 @@ func (o *Order) Get(id string) (*models.Order, error) {
 func (o *Order) UpdateStatus(id, status string) error {
 	statusName := "status"
 	input := &dynamodb.UpdateItemInput{
-    ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-				":status": {
-					S: aws.String(status),
-				},
-				":last_updated": {
-					S: aws.String(time.Now().UTC().Format(util.FormatDate)),
-				},
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":status": {
+				S: aws.String(status),
+			},
+			":last_updated": {
+				S: aws.String(time.Now().UTC().Format(util.FormatDate)),
+			},
 		},
 		ExpressionAttributeNames: map[string]*string{
 			"#ts": &statusName,
 		},
-    TableName: aws.String("Order"),
-    Key: map[string]*dynamodb.AttributeValue{
-        "id": {
-            S: aws.String(id),
-        },
-    },
-    ReturnValues:     aws.String("UPDATED_NEW"),
-    UpdateExpression: aws.String("set #ts = :status, last_updated= :last_updated"),
+		TableName: aws.String("Order"),
+		Key: map[string]*dynamodb.AttributeValue{
+			"id": {
+				S: aws.String(id),
+			},
+		},
+		ReturnValues:     aws.String("UPDATED_NEW"),
+		UpdateExpression: aws.String("set #ts = :status, last_updated= :last_updated"),
 	}
 
 	_, err := o.DB.UpdateItem(input)
 	if err != nil {
-    return err
+		return err
 	}
-	
+
 	return nil
 }
 
@@ -96,7 +96,7 @@ func (o *Order) Create(order *models.Order) error {
 		return err
 	}
 
-	input := &dynamodb.PutItemInput {
+	input := &dynamodb.PutItemInput{
 		Item:      av,
 		TableName: aws.String(tableName),
 	}

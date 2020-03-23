@@ -3,15 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-	"os"
 	"github.com/alexrv11/lambda-api-taxi-friend/common/db"
 	"github.com/alexrv11/lambda-api-taxi-friend/common/response"
 	"github.com/alexrv11/lambda-api-taxi-friend/models"
 	"github.com/alexrv11/lambda-api-taxi-friend/providers/storage"
 	"github.com/alexrv11/lambda-api-taxi-friend/repository"
 	"github.com/alexrv11/lambda-api-taxi-friend/services"
+	"log"
+	"net/http"
+	"os"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -51,14 +51,14 @@ func Create(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, 
 	payload := []byte(req.Body)
 	driver := &models.Driver{}
 	err := json.Unmarshal(payload, driver)
-	
+
 	if err != nil {
-		errorLogger.Printf("%s",  err.Error())
-	
+		errorLogger.Printf("%s", err.Error())
+
 		return handleResponse.ServerError(err)
 	}
 
-	result , err := driverService.Create(driver)
+	result, err := driverService.Create(driver)
 	if err != nil {
 		return handleResponse.ServerError(err)
 	}
@@ -79,13 +79,12 @@ func UpdateDriverLocation(req events.APIGatewayProxyRequest) (events.APIGatewayP
 	driverID := req.PathParameters["driverid"]
 	payload := []byte(req.Body)
 
-
 	location := &models.Location{}
 	err := json.Unmarshal(payload, location)
-	
+
 	if err != nil {
-		errorLogger.Printf("%s",  err.Error())
-	
+		errorLogger.Printf("%s", err.Error())
+
 		return handleResponse.ServerError(err)
 	}
 
@@ -93,24 +92,23 @@ func UpdateDriverLocation(req events.APIGatewayProxyRequest) (events.APIGatewayP
 	if err != nil {
 		return handleResponse.ServerError(err)
 	}
-	
+
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Body:       "",
 	}, nil
 }
 
-
 func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	switch req.HTTPMethod {
 	case "GET":
-			return GetItem(req)
+		return GetItem(req)
 	case "POST":
-			return Create(req)
-	case "PATCH": 
-			return UpdateDriverLocation(req)
+		return Create(req)
+	case "PATCH":
+		return UpdateDriverLocation(req)
 	default:
-			return handleResponse.ClientError(http.StatusMethodNotAllowed, "resources method not allowed")
+		return handleResponse.ClientError(http.StatusMethodNotAllowed, "resources method not allowed")
 	}
 }
 

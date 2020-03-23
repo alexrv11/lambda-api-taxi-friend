@@ -21,7 +21,6 @@ func TestCompareHashAndPassword(t *testing.T) {
 	assert.Equal(t, true, result)
 }
 
-
 func TestCompareHashAndPassword_InvalidPass(t *testing.T) {
 	password := "control123"
 	hash := CreatePassword(password)

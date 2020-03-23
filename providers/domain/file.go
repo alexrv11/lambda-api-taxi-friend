@@ -1,6 +1,6 @@
 package domain
 
 type File struct {
-	Name string
+	Name    string
 	Content string
 }

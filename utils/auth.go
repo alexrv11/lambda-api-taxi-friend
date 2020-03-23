@@ -12,7 +12,6 @@ func CreatePassword(password string) string {
 	// than the MinCost (4)
 	hash, _ := bcrypt.GenerateFromPassword(pass, bcrypt.MinCost)
 
-
 	return string(hash)
 }
 

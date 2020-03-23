@@ -1,12 +1,12 @@
 package storage
 
 import (
+	"github.com/alexrv11/lambda-api-taxi-friend/providers/domain"
+	"github.com/alexrv11/lambda-api-taxi-friend/providers/storage/mocks"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"strings"
-	"github.com/alexrv11/lambda-api-taxi-friend/providers/domain"
-	"github.com/alexrv11/lambda-api-taxi-friend/providers/storage/mocks"
 	"testing"
 )
 
@@ -15,7 +15,7 @@ func TestUploaderS3_UploadFile(t *testing.T) {
 	mockStorage.On("PutObject", mock.MatchedBy(func(input *s3.PutObjectInput) bool {
 		key := *input.Key
 		if strings.EqualFold(key, "1000/test1") ||
-			 strings.EqualFold(key ,"1000/test2") {
+			strings.EqualFold(key, "1000/test2") {
 			return true
 		}
 

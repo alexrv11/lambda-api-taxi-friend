@@ -3,14 +3,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/alexrv11/lambda-api-taxi-friend/common/db"
+	"github.com/alexrv11/lambda-api-taxi-friend/common/response"
+	"github.com/alexrv11/lambda-api-taxi-friend/models"
+	"github.com/alexrv11/lambda-api-taxi-friend/repository"
+	"github.com/alexrv11/lambda-api-taxi-friend/services"
 	"log"
 	"net/http"
 	"os"
-	"github.com/alexrv11/lambda-api-taxi-friend/common/db"
-	"github.com/alexrv11/lambda-api-taxi-friend/common/response"
-	"github.com/alexrv11/lambda-api-taxi-friend/repository"
-	"github.com/alexrv11/lambda-api-taxi-friend/services"
-	"github.com/alexrv11/lambda-api-taxi-friend/models"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -49,14 +49,14 @@ func CreateQr(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse
 	payload := []byte(req.Body)
 	qr := &models.Qr{}
 	err := json.Unmarshal(payload, qr)
-	
+
 	if err != nil {
-		errorLogger.Printf("%s",  err.Error())
-	
+		errorLogger.Printf("%s", err.Error())
+
 		return handleResponse.ServerError(err)
 	}
 
-	result , err := qrService.Create(qr)
+	result, err := qrService.Create(qr)
 	if err != nil {
 		return handleResponse.ServerError(err)
 	}
@@ -77,13 +77,12 @@ func UpdateQrDriverID(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 	qrID := req.PathParameters["id"]
 	payload := []byte(req.Body)
 
-
 	qr := &models.InputQrDriver{}
 	err := json.Unmarshal(payload, qr)
-	
+
 	if err != nil {
-		errorLogger.Printf("%s",  err.Error())
-	
+		errorLogger.Printf("%s", err.Error())
+
 		return handleResponse.ServerError(err)
 	}
 
@@ -91,7 +90,7 @@ func UpdateQrDriverID(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 	if err != nil {
 		return handleResponse.ServerError(err)
 	}
-	
+
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Body:       "",
@@ -101,13 +100,13 @@ func UpdateQrDriverID(req events.APIGatewayProxyRequest) (events.APIGatewayProxy
 func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	switch req.HTTPMethod {
 	case "GET":
-			return GetQr(req)
+		return GetQr(req)
 	case "POST":
-			return CreateQr(req)
-	case "PATCH": 
-			return UpdateQrDriverID(req)
+		return CreateQr(req)
+	case "PATCH":
+		return UpdateQrDriverID(req)
 	default:
-			return handleResponse.ClientError(http.StatusMethodNotAllowed, "resources method not allowed")
+		return handleResponse.ClientError(http.StatusMethodNotAllowed, "resources method not allowed")
 	}
 }
 

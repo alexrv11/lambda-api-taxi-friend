@@ -1,8 +1,8 @@
 package providers
 
 import (
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/alexrv11/lambda-api-taxi-friend/providers/domain"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 type Storage interface {

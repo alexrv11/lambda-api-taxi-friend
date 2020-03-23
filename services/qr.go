@@ -24,7 +24,7 @@ func NewQr(repo repository.IQr) IQr {
 }
 
 //UpdateDriver update driver qr
-func (q *Qr) UpdateDriver(driverID, qrCode string) error  {
+func (q *Qr) UpdateDriver(driverID, qrCode string) error {
 	return q.QrRepository.UpdateDriver(driverID, qrCode)
 }
 
@@ -41,4 +41,3 @@ func (q *Qr) Create(qr *models.Qr) (*models.Qr, error) {
 func (q *Qr) GetItem(code string) (*models.Qr, error) {
 	return q.QrRepository.Get(code)
 }
-

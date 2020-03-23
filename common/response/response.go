@@ -1,9 +1,9 @@
 package response
 
 import (
+	"github.com/aws/aws-lambda-go/events"
 	"log"
 	"net/http"
-	"github.com/aws/aws-lambda-go/events"
 )
 
 //HandlerResponse prepare a gateway response
@@ -22,7 +22,7 @@ func New(log *log.Logger) *HandlerResponse {
 func (handle *HandlerResponse) ServerError(err error) (events.APIGatewayProxyResponse, error) {
 	handle.log.Println(err.Error())
 
-	return events.APIGatewayProxyResponse {
+	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusInternalServerError,
 		Body:       err.Error(),
 	}, nil
@@ -30,7 +30,7 @@ func (handle *HandlerResponse) ServerError(err error) (events.APIGatewayProxyRes
 
 // Similarly add a helper for send responses relating to client errors.
 func (handle *HandlerResponse) ClientError(status int, message string) (events.APIGatewayProxyResponse, error) {
-	return events.APIGatewayProxyResponse {
+	return events.APIGatewayProxyResponse{
 		StatusCode: status,
 		Body:       http.StatusText(status),
 	}, nil

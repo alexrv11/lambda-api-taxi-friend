@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/alexrv11/lambda-api-taxi-friend/models"
 	"github.com/alexrv11/lambda-api-taxi-friend/common/util"
+	"github.com/alexrv11/lambda-api-taxi-friend/models"
 	"github.com/alexrv11/lambda-api-taxi-friend/repository"
 	"time"
 
@@ -34,22 +34,22 @@ func (o *Order) Create(inputOrder *models.InputOrder) (*models.Order, error) {
 	dateCreated := time.Now().UTC().Format(util.FormatDate)
 	lastUpdated := time.Now().UTC().Format(util.FormatDate)
 
-	order := &models.Order {
-						ID: id,
-						Status : status,
-						DateCreated: dateCreated,
-						LastUpdated:lastUpdated,
-						Longitude: inputOrder.Longitude,
-						Latitude: inputOrder.Latitude,
-						DriverID: inputOrder.DriverID,
-					}
-	
-	return order ,o.OrderRepository.Create(order)
+	order := &models.Order{
+		ID:          id,
+		Status:      status,
+		DateCreated: dateCreated,
+		LastUpdated: lastUpdated,
+		Longitude:   inputOrder.Longitude,
+		Latitude:    inputOrder.Latitude,
+		DriverID:    inputOrder.DriverID,
+	}
+
+	return order, o.OrderRepository.Create(order)
 }
 
 //UpdateStatus updates a order
 func (o *Order) UpdateStatus(id, status string) error {
-	
+
 	return o.OrderRepository.UpdateStatus(id, status)
 }
 
