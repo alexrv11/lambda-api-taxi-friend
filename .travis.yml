@@ -7,6 +7,9 @@ go:
 notifications:
   email: false
 
+before_script:
+  - go get -u ./...
+
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
   - go vet ./...
