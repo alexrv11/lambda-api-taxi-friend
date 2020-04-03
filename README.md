@@ -3,9 +3,7 @@
 
 # Taxifriend server
 
-I known, there is no document in this repo so in the next week I will improve all the weak points.
-- CI
-- build validation
+The taxifriend server is an application to provides taxi services, monitoring taxi location, provide information in a near arear, register new drivers
 
 ### Technologies
 
@@ -13,6 +11,9 @@ I known, there is no document in this repo so in the next week I will improve al
 2. Aws lambda functions
 4. AWS S3
 5. Aws Dynamodb
+6. AWS API Gateway
+7. AWS Serverless Application Model
+8. AWS Cognito
 
 ### Next task
 
@@ -38,7 +39,7 @@ script:
   - golint -set_exit_status $(go list ./...) # one last linter
   
   
-# lambda-api-taxi-friend
+## lambda-api-taxi-friend
 
 This is a sample template for lambda-api-taxi-friend - Below is a brief explanation of what we have generated for you:
 
@@ -138,7 +139,7 @@ You can find your API Gateway Endpoint URL in the output values displayed after 
 We use `testing` package that is built-in in Golang and you can simply run the following command to run our tests:
 
 ```shell
-go test -v ./hello-world/
+go test -v ./...
 ```
 # Appendix
 
@@ -146,45 +147,3 @@ go test -v ./hello-world/
 
 Please ensure Go 1.x (where 'x' is the latest version) is installed as per the instructions on the official golang website: https://golang.org/doc/install
 
-A quickstart way would be to use Homebrew, chocolatey or your linux package manager.
-
-#### Homebrew (Mac)
-
-Issue the following command from the terminal:
-
-```shell
-brew install golang
-```
-
-If it's already installed, run the following command to ensure it's the latest version:
-
-```shell
-brew update
-brew upgrade golang
-```
-
-#### Chocolatey (Windows)
-
-Issue the following command from the powershell:
-
-```shell
-choco install golang
-```
-
-If it's already installed, run the following command to ensure it's the latest version:
-
-```shell
-choco upgrade golang
-```
-
-## Bringing to the next level
-
-Here are a few ideas that you can use to get more acquainted as to how this overall process works:
-
-* Create an additional API resource (e.g. /hello/{proxy+}) and return the name requested through this new path
-* Update unit test to capture that
-* Package & Deploy
-
-Next, you can use the following resources to know more about beyond hello world samples and how others structure their Serverless applications:
-
-* [AWS Serverless Application Repository](https://aws.amazon.com/serverless/serverlessrepo/)
